@@ -1,80 +1,69 @@
 package com.example.trainticket.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-@Entity
 public class Ticket {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String fromLocation;
-    private String toLocation;
     private String firstName;
     private String lastName;
-    @Column(unique = true)
     private String email;
-    private double pricePaid;
+    private String from;
+    private String to;
+    private double price;
     private String section;
     private int seatNumber;
-    public Long getId() {
-        return id;
+
+    public Ticket(String firstName, String lastName, String email, String from, String to, String section, int seatNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.from = from;
+        this.to = to;
+        this.price = 20.0; // Fixed price as per requirements
+        this.section = section;
+        this.seatNumber = seatNumber;
     }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getFromLocation() {
-        return fromLocation;
-    }
-    public void setFromLocation(String fromLocation) {
-        this.fromLocation = fromLocation;
-    }
-    public String getToLocation() {
-        return toLocation;
-    }
-    public void setToLocation(String toLocation) {
-        this.toLocation = toLocation;
-    }
+
     public String getFirstName() {
         return firstName;
     }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+
     public String getLastName() {
         return lastName;
     }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+
     public String getEmail() {
         return email;
     }
-    public void setEmail(String email) {
-        this.email = email;
+
+    public String getFrom() {
+        return from;
     }
-    public double getPricePaid() {
-        return pricePaid;
+
+    public String getTo() {
+        return to;
     }
-    public void setPricePaid(double pricePaid) {
-        this.pricePaid = pricePaid;
+
+    public double getPrice() {
+        return price;
     }
+
     public String getSection() {
         return section;
     }
-    public void setSection(String section) {
-        this.section = section;
-    }
+
     public int getSeatNumber() {
         return seatNumber;
     }
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = seatNumber;
+
+    @Override
+    public String toString() {
+        return "Ticket Receipt: \n" +
+                "Name: " + firstName + " " + lastName + "\n" +
+                "Email: " + email + "\n" +
+                "From: " + from + "\n" +
+                "To: " + to + "\n" +
+                "Price: $" + price + "\n" +
+                "Section: " + section + "\n" +
+                "Seat Number: " + seatNumber;
     }
-    
     
 }
