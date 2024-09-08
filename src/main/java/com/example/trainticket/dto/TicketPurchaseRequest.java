@@ -12,7 +12,4 @@ public class TicketPurchaseRequest {
         this.userEmail = userEmail;
     }
 
-    
-    // Getter and setter
-    // ...
 }

@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.trainticket.dto.ModifySeatRequest;
-import com.example.trainticket.dto.PurchaseRequest;
 import com.example.trainticket.dto.TicketPurchaseRequest;
 import com.example.trainticket.model.Ticket;
 import com.example.trainticket.model.User;
