@@ -1,5 +1,7 @@
 package com.example.trainticket;
 
+import com.example.trainticket.service.TrainService;
+import org.springframework.context.ApplicationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TrainticketApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TrainticketApplication.class, args);
+		ApplicationContext appContext = SpringApplication.run(TrainticketApplication.class, args);
+		TrainService trainService = appContext.getBean(TrainService.class);
+		trainService.initialise();
 	}
 
 }

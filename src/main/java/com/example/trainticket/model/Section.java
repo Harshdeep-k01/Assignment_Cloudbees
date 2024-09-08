@@ -1,52 +1,68 @@
 package com.example.trainticket.model;
-import java.util.HashSet;
-import java.util.Set;
+
+import com.example.trainticket.customExceptions.NotFoundException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class Section {
-    private String name;
-    private int capacity;
-    private Set<Integer> occupiedSeats;
+    private String sectionName;
+    private List<Seat> seats;
 
-    public Section(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-        this.occupiedSeats = new HashSet<>();
-    }
-
-    public boolean isSeatAvailable(int seatNumber) {
-        return seatNumber > 0 && seatNumber <= capacity && !occupiedSeats.contains(seatNumber);
-    }
-
-    public void occupySeat(int seatNumber) {
-        if (isSeatAvailable(seatNumber)) {
-            occupiedSeats.add(seatNumber);
-        } else {
-            throw new IllegalStateException("Seat " + seatNumber + " is not available in section " + name);
+    public Section(String sectionName){
+        this.sectionName = sectionName;
+        this.seats = new ArrayList<Seat>(Collections.nCopies(10, new Seat(0)));
+        for(int i=0; i < seats.size(); i++){
+            seats.set(i, new Seat(i));
         }
+        System.out.printf("section have seats initialised, seatno is %d", this.seats.get(2).getSeatNo());
     }
 
-    public void releaseSeat(int seatNumber) {
-        occupiedSeats.remove(seatNumber);
+    public String getSectionName(){
+        return this.sectionName;
     }
 
-    public int getNextAvailableSeat() {
-        for (int i = 1; i <= capacity; i++) {
-            if (isSeatAvailable(i)) {
-                return i;
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSectionName(String sectionName){
+        this.sectionName = sectionName;
+    }
+
+    public int getEmptySeats(){
+        int seatCounter = 0;
+        for(Seat seat: seats){
+            if(seat.getUser() == null){
+                seatCounter++;
             }
         }
-        throw new IllegalStateException("No available seats in section " + name);
+        System.out.printf("%s has %d available seats\n", this.getSectionName(), seatCounter);
+        System.out.println();
+        return seatCounter;
     }
 
-    public String getName() {
-        return name;
+    public int setNextEmptySeats(User user){
+        for(Seat seat: seats){
+            if(seat.getUser() == null){
+                seat.setUser(user);
+                return seat.getSeatNo();
+            }
+        }
+        return -1;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public void deallocateSeat(int seatNo) throws NotFoundException {
+        for(Seat seat: seats){
+            if(seat.getSeatNo() == seatNo){
+                seat.removeUser();
+                return;
+            }
+        }
+        throw new NotFoundException("Seat no does not exist");
     }
 
-    public int getAvailableSeats() {
-        return capacity - occupiedSeats.size();
-    }
+
 }

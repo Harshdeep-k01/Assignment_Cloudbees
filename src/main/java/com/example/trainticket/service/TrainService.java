@@ -1,39 +1,53 @@
 package com.example.trainticket.service;
 
+import com.example.trainticket.customExceptions.NotFoundException;
+import com.example.trainticket.model.*;
+import com.example.trainticket.repository.TrainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.trainticket.model.Train;
-import com.example.trainticket.repository.TrainRepository;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TrainService {
-
     @Autowired
-    private TrainRepository trainRepository;
+    TrainRepository trainRepository;
 
-    public Train createTrain(Train train) {
-        return trainRepository.save(train);
+    public void initialise(){
+        System.out.println("Initializing trains: Mumbai -> Punjab, Punjab -> New Delhi, New Delhi -> Mumbai");
+        trainRepository.create("Mumbai", "Punjab", 200);
+        trainRepository.create("Punjab", "New Delhi", 100);
+        trainRepository.create("New Delhi", "Mumbai", 150);
     }
 
-    public List<Train> getAllTrains() {
-        return trainRepository.findAll();
+    public void setNextAvailableSeat(Train train, Ticket ticket, User user) throws NotFoundException {
+        System.out.println(train);
+        Section available_section =  getNextAvailableSection(train);
+        ticket.setSection(available_section.getSectionName());
+        ticket.setSeatNumber(available_section.setNextEmptySeats(user));
     }
 
-    public Optional<Train> getTrainById(String id) {
-        return trainRepository.findById(id);
-    }
-
-    public Optional<Train> updateTrain(String id, Train updatedTrain) {
-        if (trainRepository.findById(id).isPresent()) {
-            updatedTrain.setId(id); // Ensure ID doesn't change
-            return Optional.of(trainRepository.save(updatedTrain));
+    public Section getNextAvailableSection(Train train) throws NotFoundException {
+        int mostAvailableSeat = 0;
+        Section availableSection = null;
+        for(Section section: train.getSections()){
+            int availableSeats = section.getEmptySeats();
+            if (availableSeats > mostAvailableSeat){
+                availableSection = section;
+                mostAvailableSeat = availableSeats;
+            }
         }
-        return Optional.empty();
+
+        if (availableSection == null){
+            throw new NotFoundException("The Train is Fully booked");
+        }
+        return availableSection;
     }
 
-    public boolean deleteTrain(String id) {
-        return trainRepository.deleteById(id);
+    public void deallocateSeat(Train train, String sectionName, int seatNo) throws NotFoundException {
+        for (Section section :train.getSections()){
+            if (section.getSectionName().equals(sectionName)){
+                section.deallocateSeat(seatNo);
+            }
+        }
     }
+
 }

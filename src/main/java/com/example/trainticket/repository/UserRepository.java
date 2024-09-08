@@ -1,43 +1,46 @@
 package com.example.trainticket.repository;
 
+import com.example.trainticket.model.User;
 import org.springframework.stereotype.Repository;
 
-import com.example.trainticket.model.User;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class UserRepository {
-    private List<User> users = new ArrayList<>();
 
-    public User save(User user) {
-        users.removeIf(u -> u.getEmail().equals(user.getEmail()));
-        users.add(user);
+    private static int userCounter = 0;
+    private HashMap<Integer, User> users = new HashMap<>();
+
+    public User getUserById(int id){
+        return users.get(id);
+    }
+
+    public User getUserByData(String firstName, String lastName, String email){
+        for (Map.Entry<Integer, User> entry : users.entrySet()) {
+            if (entry.getValue().getFirstName().equals(firstName)
+                    && entry.getValue().getLastName().equals(lastName)
+                    && entry.getValue().getEmail().equals(email)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    public User findOrCreate(String firstName, String lastName, String email){
+        User user = getUserByData(firstName, lastName, email);
+        if(user != null){
+            return user;
+        }
+
+        user = new User(firstName, lastName, email);
+        user.setId(generateId());
+
         return user;
     }
 
-    public Optional<User> findByEmail(String email) {
-        return users.stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst();
+    int generateId(){
+        return ++userCounter;
     }
 
-    public void delete(User user) {
-        users.remove(user);
-    }
-
-    public List<User> findAll() {
-        return new ArrayList<>(users);
-    }
-
-    public User update(User user) {
-        delete(user);
-        return save(user);
-    }
-
-    public boolean deleteByEmail(String email) {
-        return users.removeIf(u -> u.getEmail().equals(email));
-    }
 }

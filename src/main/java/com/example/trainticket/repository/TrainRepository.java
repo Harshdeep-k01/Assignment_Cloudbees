@@ -1,35 +1,34 @@
 package com.example.trainticket.repository;
 
-import org.springframework.stereotype.Repository;
 import com.example.trainticket.model.Train;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public class TrainRepository {
-    private Map<String, Train> trains = new HashMap<>();
+    private List<Train> trains = new ArrayList<Train>();
 
-    public Train save(Train train) {
-        trains.put(train.getId(), train);
+
+    public Train find(String from, String to){
+        for (Train t: this.trains){
+            if (t.getFrom().equals(from) && t.getTo().equals(to)){
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public Train create(String from, String to, double price){
+        Train train = find(from,to);
+        if (train != null){
+            return train;
+        }
+
+        train = new Train(from, to, price);
+        trains.add(train);
         return train;
     }
 
-    public Optional<Train> findById(String id) {
-        return Optional.ofNullable(trains.get(id));
-    }
-
-    public List<Train> findAll() {
-        return new ArrayList<>(trains.values());
-    }
-
-    public void delete(Train train) {
-        trains.remove(train.getId());
-    }
-
-    public boolean deleteById(String id) {
-        return trains.remove(id) != null;
-    }
 }

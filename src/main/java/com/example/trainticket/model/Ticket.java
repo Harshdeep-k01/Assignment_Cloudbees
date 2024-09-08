@@ -1,37 +1,25 @@
 package com.example.trainticket.model;
 
-
 public class Ticket {
-    private String from;
-    private String to;
+
+    private int id;
+
     private User user;
+    private Train train;
     private double price;
     private String section;
     private int seatNumber;
 
-    public Ticket(String from, String to, User user, double price, String section, int seatNumber) {
-        this.from = from;
-        this.to = to;
+    public Ticket(User user, Train train) {
         this.user = user;
-        this.price = price;
-        this.section = section;
-        this.seatNumber = seatNumber;
+        this.train = train;
     }
 
-    public String getFrom() {
-        return from;
+    public int getId() {
+        return id;
     }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -40,6 +28,14 @@ public class Ticket {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Train getTrain() {
+        return train;
+    }
+
+    public void setTrain(Train train) {
+        this.train = train;
     }
 
     public double getPrice() {
@@ -66,5 +62,17 @@ public class Ticket {
         this.seatNumber = seatNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Ticket Receipt: \n" +
+                "Ticket ID: "+ this.getId() + "\n"+
+                "Name: " + user.getFirstName() + " " + user.getLastName() + "\n" +
+                "Email: " + user.getEmail() + "\n" +
+                "From: " + train.getFrom() + "\n" +
+                "To: " + train.getTo() + "\n" +
+                "Price: $" + price + "\n" +
+                "Section: " + section + "\n" +
+                "Seat Number: " + seatNumber;
+    }
     
 }

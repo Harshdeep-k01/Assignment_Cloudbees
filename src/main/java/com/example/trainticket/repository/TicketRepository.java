@@ -1,41 +1,48 @@
 package com.example.trainticket.repository;
+
+import com.example.trainticket.customExceptions.NotFoundException;
+import com.example.trainticket.model.Ticket;
+import com.example.trainticket.model.Train;
+import com.example.trainticket.model.User;
 import org.springframework.stereotype.Repository;
 
-import com.example.trainticket.model.Ticket;
-import com.example.trainticket.model.User;
+import java.util.HashMap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class TicketRepository {
-    private List<Ticket> tickets = new ArrayList<>();
+    private static int ticketCounter = 0;
+    public HashMap<Integer, Ticket> tickets = new HashMap<>();
 
-    public Ticket save(Ticket ticket) {
-        tickets.removeIf(t -> t.getUser().equals(ticket.getUser()));
-        tickets.add(ticket);
+    public Ticket create(User user, Train train){
+        Ticket ticket = new Ticket(user, train);
+        ticket.setId(generateId());
+
+        tickets.put(ticket.getId(), ticket);
+
+        System.out.printf("Booked ticket from %s to %s  for %s %s at %f with id %d\n", train.getFrom(), train.getTo(), user.getFirstName(), user.getLastName(), train.getPrice(), ticket.getId());
+        System.out.println();
         return ticket;
     }
 
-    public Optional<Ticket> findByUser(User user) {
-        return tickets.stream()
-                .filter(t -> t.getUser().equals(user))
-                .findFirst();
+    int generateId(){
+        return ++ticketCounter;
     }
 
-    public List<Ticket> findBySection(String section) {
-        return tickets.stream()
-                .filter(t -> t.getSection().equals(section))
-                .collect(Collectors.toList());
+    public Ticket getTicketById(int id){
+        return tickets.get(id);
     }
 
-    public void delete(Ticket ticket) {
-        tickets.remove(ticket);
+    public Ticket modifyTicket(int id, int seatNo, String section) throws NotFoundException {
+        Ticket ticket = getTicketById(id);
+        if(ticket == null){
+            throw new NotFoundException("Ticket Does not exist");
+        }
+
+        ticket.setSection(section);
+        ticket.setSeatNumber(seatNo);
+        return ticket;
     }
 
-    public List<Ticket> findAll() {
-        return new ArrayList<>(tickets);
-    }
 }
+

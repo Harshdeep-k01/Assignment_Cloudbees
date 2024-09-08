@@ -1,81 +1,59 @@
 package com.example.trainticket.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Train {
-    private String id;
-    private String name;
-    private String route;
-    private Map<String, Section> sections;
 
-    public Train(String id, String name, String route) {
-        this.id = id;
-        this.name = name;
-        this.route = route;
-        this.sections = new HashMap<>();
+    private String from;
+    private String to;
+    private double price;
+
+    private List<Section> sections;
+
+
+    public Train(String from, String to, double price) {
+        this.from = from;
+        this.to = to;
+        this.price = price;
+        this.sections = Arrays.asList(
+            new Section("Section_A"),
+            new Section("Section_B")
+        );
     }
 
-    public String getId() {
-        return id;
+    public String getFrom() {
+        return from;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public String getName() {
-        return name;
+    public String getTo() {
+        return to;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTo(String to) {
+        this.to = to;
     }
 
-    public String getRoute() {
-        return route;
+    public double getPrice() {
+        return price;
     }
 
-    public void setRoute(String route) {
-        this.route = route;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public void addSection(String sectionName, int capacity) {
-        sections.put(sectionName, new Section(sectionName, capacity));
+    public List<Section> getSections() {
+        return sections;
     }
 
-    public Section getSection(String sectionName) {
-        return sections.get(sectionName);
+    public void setSections(List<Section> sections) {
+        this.sections = sections;
     }
-
-    public Map<String, Section> getSections() {
-        return new HashMap<>(sections);
-    }
-
-
-    public Train(String id) {
-        this.id = id;
-        this.sections = new HashMap<>();
-    }
-
-
-    public boolean isSeatAvailable(String sectionName, int seatNumber) {
-        Section section = sections.get(sectionName);
-        return section != null && section.isSeatAvailable(seatNumber);
-    }
-
-    public void occupySeat(String sectionName, int seatNumber) {
-        Section section = sections.get(sectionName);
-        if (section != null) {
-            section.occupySeat(seatNumber);
-        }
-    }
-
-    public void releaseSeat(String sectionName, int seatNumber) {
-        Section section = sections.get(sectionName);
-        if (section != null) {
-            section.releaseSeat(seatNumber);
-        }
-    }
-
 }
+
+
