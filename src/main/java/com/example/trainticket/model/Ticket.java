@@ -1,69 +1,70 @@
 package com.example.trainticket.model;
 
-public class Ticket {
 
-    private String firstName;
-    private String lastName;
-    private String email;
+public class Ticket {
     private String from;
     private String to;
+    private User user;
     private double price;
     private String section;
     private int seatNumber;
 
-    public Ticket(String firstName, String lastName, String email, String from, String to, String section, int seatNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+    public Ticket(String from, String to, User user, double price, String section, int seatNumber) {
         this.from = from;
         this.to = to;
-        this.price = 20.0; // Fixed price as per requirements
+        this.user = user;
+        this.price = price;
         this.section = section;
         this.seatNumber = seatNumber;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getFrom() {
         return from;
     }
 
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
     public String getTo() {
         return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public double getPrice() {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public String getSection() {
         return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
     }
 
     public int getSeatNumber() {
         return seatNumber;
     }
 
-    @Override
-    public String toString() {
-        return "Ticket Receipt: \n" +
-                "Name: " + firstName + " " + lastName + "\n" +
-                "Email: " + email + "\n" +
-                "From: " + from + "\n" +
-                "To: " + to + "\n" +
-                "Price: $" + price + "\n" +
-                "Section: " + section + "\n" +
-                "Seat Number: " + seatNumber;
+    public void setSeatNumber(int seatNumber) {
+        this.seatNumber = seatNumber;
     }
+
     
 }
